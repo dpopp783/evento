@@ -8,7 +8,6 @@ type EventsPageProps = {
 
 export default async function EventsPage({ params }: EventsPageProps) {
   const city = params.city;
-
   const response = await fetch(`${BASE_API_URL}/events?city=${city}`);
   const events = await response.json();
 
