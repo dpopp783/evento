@@ -1,5 +1,5 @@
 import H1 from "@/components/h1";
-import { BASE_API_URL } from "@/lib/constants";
+import { getEvent } from "@/lib/utils";
 import { Metadata } from "next";
 import Image from "next/image";
 
@@ -9,8 +9,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = params.slug;
-  const response = await fetch(`${BASE_API_URL}/${slug}`);
-  const event = await response.json();
+  const event = await getEvent(slug);
   return {
     title: event.name,
   };
@@ -18,8 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function EventPage({ params }: Props) {
   const slug = params.slug;
-  const response = await fetch(`${BASE_API_URL}/${slug}`);
-  const event = await response.json();
+  const event = await getEvent(slug);
 
   return (
     <main>
