@@ -1,13 +1,24 @@
 import H1 from "@/components/h1";
 import { BASE_API_URL } from "@/lib/constants";
+import { Metadata } from "next";
 import Image from "next/image";
 
-type EventPageProps = {
+type Props = {
   params: { slug: string };
 };
-export default async function EventPage({ params }: EventPageProps) {
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = params.slug;
-  const response = await fetch(`${BASE_API_URL}/events/${slug}`);
+  const response = await fetch(`${BASE_API_URL}/${slug}`);
+  const event = await response.json();
+  return {
+    title: event.name,
+  };
+}
+
+export default async function EventPage({ params }: Props) {
+  const slug = params.slug;
+  const response = await fetch(`${BASE_API_URL}/${slug}`);
   const event = await response.json();
 
   return (
