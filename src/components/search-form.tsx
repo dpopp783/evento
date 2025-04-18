@@ -15,10 +15,6 @@ export default function SearchForm() {
     router.push(`/events/${searchText}`);
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(event.target.value);
-  };
-
   return (
     <form onSubmit={handleSubmit} className="w-full sm:w-[580px]">
       <input
