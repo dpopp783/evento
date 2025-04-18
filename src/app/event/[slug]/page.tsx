@@ -15,6 +15,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// Prerender the pages for the top 3 events (not really what I'd do here, just so I have the reference of how to prerender stuff if needed)
+export async function generateStaticParams() {
+  return [
+    { slug: "dj-practice-session" },
+    { slug: "science-space-expo" },
+    { slug: "global-food-festival" },
+  ];
+}
+
 export default async function EventPage({ params }: Props) {
   const slug = params.slug;
   const event = await getEvent(slug);
