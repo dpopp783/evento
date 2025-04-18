@@ -2,6 +2,7 @@ import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import prisma from "./db";
 import { notFound } from "next/navigation";
+import { RESULTS_PER_PAGE } from "./consts";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -29,7 +30,7 @@ export async function getEvent(slug: string) {
   return event;
 }
 
-export async function getEvents(city: string) {
+export async function getEvents(city: string, page: number = 1) {
   const events = await prisma.eventoEvent.findMany({
     where: {
       city: city === "all" ? undefined : capitalize(city),
@@ -37,6 +38,21 @@ export async function getEvents(city: string) {
     orderBy: {
       date: "asc",
     },
+    take: RESULTS_PER_PAGE,
+    skip: (page - 1) * RESULTS_PER_PAGE,
   });
-  return events;
+
+  let numEvents;
+
+  if (city === "all") {
+    numEvents = await prisma.eventoEvent.count();
+  } else {
+    numEvents = await prisma.eventoEvent.count({
+      where: {
+        city: capitalize(city),
+      },
+    });
+  }
+
+  return { events, numEvents };
 }
